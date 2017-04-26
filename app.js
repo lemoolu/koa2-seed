@@ -9,7 +9,6 @@ import { resFormatter } from './app/middleware';
 import api from './app/api';
 
 import index from './routes/index';
-import users from './routes/users';
 
 const app = new Koa();
 const bodyparser = Bodyparser();
@@ -40,6 +39,5 @@ app.use(api.routes(), api.allowedMethods());
 
 // routes
 app.use(index.routes(), index.allowedMethods());
-app.use(users.routes(), users.allowedMethods());
 
 module.exports = app;

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>API 测试页面</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/javascripts/bootstrap-3.3.7/css/bootstrap.min.css' />
+    <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/vue.min.js"></script>
+    <script type="text/javascript" src="/javascripts/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container" id="app">
+        <h4>API 测试 </h4>
+        <div class="row bg-info" style="padding: 10px 0; margin-bottom: 10px;" v-for="(item, index) in list">
+            <div class="col-xs-2">
+                <select class="form-control form-control-sm" v-model="item.method">
+                    <option value="get">GET</option>
+                    <option value="post">POST</option>
+                </select>
+            </div>
+            <div class="col-xs-3">
+                <input type="text" class="form-control form-control" v-model="item.url">
+            </div>
+            <div class="col-xs-3">
+                <button class="btn btn-success btn-sm" v-on:click="onSubmit(index)">提交</button>
+                <button type="button" class="btn btn-primary btn-sm" v-on:click="onDel(index)">删除</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <button class="btn btn-primary" v-on:click="onAdd">+</button>
+            </div>
+        </div>
+        {{list}}
+    </div>
+    <script type="text/javascript">
+    function getJson(data, reqData, callback) {
+        var data = $.extend({}, data);
+        data.success = function(res) {
+            callback && callback(res);
+        };
+        if (data.method === 'get') {
+            data.data = reqData;
+        } else if (data.method === 'post') {
+            data.contentType = 'application/json';
+            data.data = JSON.stringify(reqData);
+        }
+        $.ajax(data);
+    }
+    getJson({
+        url: '/api',
+        method: 'get'
+    }, {
+        name: 1
+    }, function(res) {
+        data.api = res.data;
+    });
+    var data = {
+        list: [],
+        api: []
+    };
+    var item = {
+        method: 'get',
+        url: '/api/',
+        res: ''
+    };
+    data.list.push($.extend({}, item));
+    var app = new Vue({
+        el: '#app',
+        data: data,
+        methods: {
+            onSubmit: function(i) {
+                console.log(i);
+            },
+            onAdd: function() {
+                data.list.push($.extend({}, item));
+            },
+            onDel: function(i) {
+                data.list.splice(i, 1);
+            }
+        }
+    })
+
+    // getJson({url: '/api/user/add', method: 'post'}, {name: 2, age: 2})
+
+    </script>
+</body>
+
+</html>

@@ -5,7 +5,7 @@ import cfg from '../config.js';
 
 // 获取信息
 export async function getInfo(id) {
-  let data = await User.findOne({ where: { id } });
+  let data = await User.findById(id);
   if (!data) {
     throw new ApiError('USER_NOT_EXIST');
   }
@@ -18,4 +18,12 @@ export async function getList({ rows, page } = {}) {
   rows = parseInt(rows) || cfg.listRows;
   let data = await User.findAndCountAll({ limit: rows, offset: (page - 1) * rows });
   return formaterList(rows, page, data);
+}
+
+export async function add(data) {
+  // console.log(User.fullName());
+  let res = await User.create(data).catch((e) => {
+    throw new ApiError('USER_CREATE_FAIL', e.errors);
+  })
+  return res;
 }

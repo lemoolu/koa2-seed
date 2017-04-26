@@ -25,7 +25,7 @@ const urlFilter = function(pattern) {
         ctx.body = {
           code: error.code,
           msg: error.msg,
-          data: error.name
+          data: error.data
         };
       }
     }
