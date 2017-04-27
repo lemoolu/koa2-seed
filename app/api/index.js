@@ -1,27 +1,16 @@
+// post 'application/json' JSON.stringify
 import Router from 'koa-router';
-import user from './user.js';
+import userRouter from './user.js';
+import loginRouter from './login.js';
 
-let router = Router();
-router.prefix('/api');
+let api = Router();
+api.prefix('/api');
 
-
-let modules = [user];
-let apis = [];
-modules.map((item) => {
-  item.routes().router.stack.map((x) => {
-    apis.push({
-      url: x.path,
-      methods: x.methods
-    });
-  });
+api.get('/', function(ctx, next) {
+  ctx.body = 'api';
 });
 
+api.use(userRouter.routes(), userRouter.allowedMethods());
+api.use(loginRouter.routes(), loginRouter.allowedMethods());
 
-router.get('/', function(ctx, next) {
-  ctx.body = apis;
-});
-
-
-router.use(user.routes(), user.allowedMethods());
-
-export default router;
+export default api;

@@ -1,29 +1,53 @@
 import { User } from '../model';
 import { ApiError } from '../error';
-import { formaterList } from '../common.js';
+import { formaterToList } from '../common.js';
 import cfg from '../config.js';
 
 // 获取信息
-export async function getInfo(id) {
+export async function getInfoById(id) {
   let data = await User.findById(id);
   if (!data) {
-    throw new ApiError('USER_NOT_EXIST');
+    throw new ApiError('user_not_exist');
   }
   return data;
 }
 
 // 获取列表
-export async function getList({ rows, page } = {}) {
-  page = parseInt(page) || 1;
-  rows = parseInt(rows) || cfg.listRows;
+export async function getList({ page, rows } = {}) {
+  page = parseInt(page, 10) || 1;
+  rows = parseInt(rows, 10) || cfg.listRows;
   let data = await User.findAndCountAll({ limit: rows, offset: (page - 1) * rows });
-  return formaterList(rows, page, data);
+  return formaterToList(rows, page, data);
 }
 
-export async function add(data) {
-  // console.log(User.fullName());
-  let res = await User.create(data).catch((e) => {
-    throw new ApiError('USER_CREATE_FAIL', e.errors);
-  })
-  return res;
+// 添加
+export async function add(newData) {
+  let data = await User.create(newData).catch((e) => {
+    throw new ApiError('user_create_fail', e.errors);
+  });
+  return data;
+}
+
+export async function update() {
+  ctx.body = 'update';
+}
+
+export async function del() {
+  ctx.body = 'del';
+}
+
+export async function loginIn({ email, password } = {}) {
+  if (!email || email === '') {
+    throw new ApiError('login_need_email');
+  }
+  if (!password || password === '') {
+    throw new ApiError('login_need_password');
+  }
+  let data = await User.findOne({
+    where: { email, password }
+  });
+  if (!data) {
+    throw new ApiError('login_fail');
+  }
+  return data;
 }
