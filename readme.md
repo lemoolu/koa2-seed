@@ -1,5 +1,5 @@
 # 说明
-添加entry.js作为整个项目入口，在其中引入babel配置，使项目支持import（async await等功能node V6已经支持）
+在bin/www中添加 require('babel-core/register')，使项目支持import
 
 
 # 命令

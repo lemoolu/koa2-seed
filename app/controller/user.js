@@ -29,11 +29,11 @@ export async function add(newData) {
 }
 
 export async function update() {
-  ctx.body = 'update';
+  return 'update';
 }
 
 export async function del() {
-  ctx.body = 'del';
+  return 'del';
 }
 
 export async function loginIn({ email, password } = {}) {

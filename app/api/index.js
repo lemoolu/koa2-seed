@@ -3,10 +3,10 @@ import Router from 'koa-router';
 import userRouter from './user.js';
 import loginRouter from './login.js';
 
-let api = Router();
+const api = Router();
 api.prefix('/api');
 
-api.get('/', function(ctx, next) {
+api.get('/', function(ctx) {
   ctx.body = 'api';
 });
 

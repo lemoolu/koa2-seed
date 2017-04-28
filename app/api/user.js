@@ -6,13 +6,11 @@ import Router from 'koa-router';
 import { ApiError } from '../error';
 import * as user from '../controller/user.js';
 
-let router = Router();
+const router = Router();
 router.prefix('/user');
 
 // 根据id获取用户信息 params: id(用户id)
 router.get('/info', async(ctx, next) => {
-  ctx.state.permission = ['login', 'user'];
-  await next();
   ctx.body = await user.getInfoById(ctx.query.id);
 });
 
@@ -35,8 +33,5 @@ router.post('/update', async(ctx, next) => {
 router.post('/del', async(ctx, next) => {
 
 });
-
-
-
 
 export default router;

@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "watch": "nodemon entry.js",
-    "start": "node entry.js",
+    "watch": "nodemon bin/www",
+    "start": "node bin/www",
     "mysql-init": "node script/mysql-init.js",
-    "pm2": "pm2 start entry.js ",
+    "pm2": "pm2 start bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -31,6 +31,12 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babel-plugin-transform-es2015-parameters": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
-    "nodemon": "^1.8.1"
+    "nodemon": "^1.8.1",
+    "eslint": "^3.10.2",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-loader": "^1.6.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.9.0"
   }
 }

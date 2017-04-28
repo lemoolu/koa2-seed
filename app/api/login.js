@@ -3,9 +3,8 @@
 */
 import Router from 'koa-router';
 import * as user from '../controller/user.js';
-import { ApiError } from '../error';
 
-let router = Router();
+const router = Router();
 router.prefix('/login');
 
 // 登陆

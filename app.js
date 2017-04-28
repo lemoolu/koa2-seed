@@ -7,6 +7,7 @@ import logger from 'koa-logger';
 import session from 'koa-session2';
 
 import { resFormatter, checkPermission } from './app/middleware';
+import rule from './app/api/api-permission-cfg.js';
 import api from './app/api';
 
 import index from './routes/index';
@@ -19,7 +20,7 @@ onerror(app);
 // middlewares
 app.use(session({
   key: 'SESSIONID',
-  maxAge: 30 * 60 * 1000 //(30分钟有效期)
+  maxAge: 30 * 60 * 1000 // (30分钟有效期)
 }));
 app.use(bodyparser);
 app.use(json());
@@ -39,14 +40,16 @@ app.use(async(ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
 
-// res formatter
-app.use(resFormatter('^/api'));
+
+app.use(resFormatter('^/api')); // res formatter
+app.use(checkPermission(rule)); // permission check
 
 // api
 app.use(api.routes(), api.allowedMethods());
-app.use(checkPermission);
-
 // routes
 app.use(index.routes(), index.allowedMethods());
+
+
+
 
 module.exports = app;
