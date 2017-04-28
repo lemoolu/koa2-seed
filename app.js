@@ -3,6 +3,7 @@ import views from 'koa-views';
 import json from 'koa-json';
 import onerror from 'koa-onerror';
 import Bodyparser from 'koa-bodyparser';
+import KoaBody from 'koa-body';
 import logger from 'koa-logger';
 import session from 'koa-session2';
 
@@ -13,7 +14,6 @@ import api from './app/api';
 import index from './routes/index';
 
 const app = new Koa();
-const bodyparser = Bodyparser();
 // error handler
 onerror(app);
 
@@ -22,14 +22,25 @@ app.use(session({
   key: 'SESSIONID',
   maxAge: 30 * 60 * 1000 // (30分钟有效期)
 }));
-app.use(bodyparser);
-app.use(json());
-app.use(logger());
+app.use(KoaBody({
+  multipart: true,
+  formidable: { uploadDir: __dirname + '/public/uploads' }
+}));
+// app.use(json());
+// app.use(logger());
 app.use(require('koa-static')(__dirname + '/public'));
 
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
 }));
+
+// 允许跨域
+app.use(async(ctx, next) => {
+  ctx.set('Access-Control-Allow-Origin', '*');
+  ctx.set('Access-Control-Allow-Headers', 'X-Requested-With');
+  ctx.set('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS');
+  await next();
+});
 
 
 // logger
@@ -48,8 +59,6 @@ app.use(checkPermission(rule)); // permission check
 app.use(api.routes(), api.allowedMethods());
 // routes
 app.use(index.routes(), index.allowedMethods());
-
-
 
 
 module.exports = app;

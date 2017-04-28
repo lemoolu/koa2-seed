@@ -28,6 +28,7 @@ const urlFilter = function(pattern) {
           data: error.data
         };
       } else {
+        console.error(error);
         ctx.status = 500;
         ctx.body = {
           code: -1,
